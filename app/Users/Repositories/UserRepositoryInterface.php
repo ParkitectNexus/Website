@@ -5,6 +5,26 @@ use PN\Users\User;
 
 interface UserRepositoryInterface
 {
+
+    /**
+     * validates user credential
+     *
+     * @param string $email
+     * @param string $password
+     * @return boolean
+     */
+    public function validateCredentials($email, $password);
+    
+     /**
+     * find by social
+     *
+     * @param int $id
+     * @param string $name
+     * @param string $email
+     * @return User
+     */
+    public function findBySocial($id, $name, $email);
+    
     /**
      * Finds user by api key
      *

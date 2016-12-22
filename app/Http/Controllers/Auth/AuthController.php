@@ -1,4 +1,4 @@
-<?php
+<?PHP
 
 namespace PN\Http\Controllers\Auth;
 

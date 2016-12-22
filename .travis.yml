@@ -1,15 +1,39 @@
+dist: trusty
+sudo: required
+
+env:
+  - TEST_SUITE=unit
+  - TEST_SUITE=functional
+
 language: php
 
 php:
   - 7.0
 
+install:
+  - 'if [ "${TEST_SUITE}" = "integration" ]; then
+      . $HOME/.nvm/nvm.sh;
+      nvm install stable;
+      nvm use stable;
+      node -v;
+      npm install -g npm@latest;
+      npm install -g bower;
+      npm install -g gulp;
+      bower install;
+      npm install;
+      npm -v;
+    fi'
+  - sudo apt-get install mono-complete
+  - mono --version
+
 before_script:
-  - sudo apt-get install -y mono-complete
-  - cp .env.travis .env
-  - mysql -e 'create database parkitectnexus_test;'
+  - mysql -e 'create database parkitect;'
   - composer self-update
   - composer install --no-interaction
-  - php artisan migrate --force
-
+  - php artisan migrate --force;
+  - 'if [ "${TEST_SUITE}" = "integration" ]; then
+     bower install;
+     gulp;
+    fi'
 script:
-  - vendor/bin/phpunit
+  - vendor/bin/codecept run ${TEST_SUITE}

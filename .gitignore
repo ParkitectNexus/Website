@@ -6,3 +6,6 @@ Homestead.json
 .env
 _ide_helper.php
 .idea
+.phpintel
+tests/_output/*
+tests/_output/*

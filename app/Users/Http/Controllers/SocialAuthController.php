@@ -17,16 +17,6 @@ use PN\Users\Repositories\UserRepositoryInterface;
 
 class SocialAuthController extends Controller
 {
-    private $userRepo;
-
-    /**
-     * SocialAuthController constructor.
-     * @param $userRepo
-     */
-    public function __construct(UserRepositoryInterface $userRepo)
-    {
-        $this->userRepo = $userRepo;
-    }
 
     /**
      * @param \Request $request
@@ -98,7 +88,7 @@ class SocialAuthController extends Controller
         if (\Request::has('code')) {
             $userData = \Socialite::with($driver)->user();
 
-            $user = $this->userRepo->findBySocial($userData->id, $driver, $userData->email);
+            $user = \UserRepo::findBySocial($userData->id, $driver, $userData->email);
 
             if($user == null) {
                 $user = $this->dispatch(app(CreateSocialUser::class, [
@@ -141,7 +131,7 @@ class SocialAuthController extends Controller
             $email = $info->getSteamID64() . '@steam.com';
 
             // try to find someone who is already linked with steam, if they do we need to log them in without doing anything
-            $user = $this->userRepo->findBySteamId($info->getSteamID64());
+            $user = \UserRepo::findBySteamId($info->getSteamID64());
 
             // couldnt find it
             if ($user == null) {
@@ -193,7 +183,7 @@ class SocialAuthController extends Controller
     {
         $identifier = \Crypt::decrypt($encryptedIdentifier);
 
-        $user = $this->userRepo->findByIdentifier($identifier);
+        $user = \UserRepo::findByIdentifier($identifier);
 
         if($user == null) {
             throw new UserNotFound($identifier);
@@ -225,7 +215,7 @@ class SocialAuthController extends Controller
     {
         $identifier = \Crypt::decrypt($encryptedIdentifier);
 
-        $user = $this->userRepo->findByIdentifier($identifier);
+        $user = \UserRepo::findByIdentifier($identifier);
 
         $user = $this->dispatch(app(SetUsername::class, [$user->id, \Request::get('username')]));
 

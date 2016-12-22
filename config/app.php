@@ -249,6 +249,7 @@ return [
         'Agent'         => Jenssegers\Agent\Facades\Agent::class,
         'Ads'           => Mastergalen\AdsenseAds\AdsFacade::class,
         'Goutte'        => Weidner\Goutte\GoutteFacade::class,
+        'NoCaptcha'     => Anhskohbo\NoCaptcha\Facades\NoCaptcha::class,
 
         /**
          * Application Facades
