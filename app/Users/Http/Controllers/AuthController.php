@@ -174,11 +174,13 @@ class AuthController extends Controller
 
             if ($user->password_token == $token) {
                 $this->dispatch(new ChangePassword($user, request('password')));
+                
+                \Auth::login($user, true);
+                
+                return \Redirect::intended();
             }
 
-            \Auth::login($user, true);
-
-            return \Redirect::intended();
+            return \Redirect::home();
         } catch (UserNotFound $e) {
             \Notification::error('The entered credentials do not match our records');
 
