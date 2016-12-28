@@ -21,16 +21,19 @@ class ClientLogServiceProvider extends ServiceProvider
         $this->app->singleton(ClientRepositoryInterface::class, ClientRepository::class);
 
         $router = $this->app['router'];
-
-        $router->get('download-client', [
-            'uses' => ClientController::class.'@downloadPage',
-            'as' => 'client.download'
-        ]);
+         $router->group(['middleware' => ['web']], function() use ($router){
+            $router->get('download-client', [
+                'uses' => ClientController::class.'@downloadPage',
+                'as' => 'client.download'
+            ]);
+        });
 
         $router->get('update.json', ['uses' => ClientController::class.'@updateWin']);
         $router->get('update-osx.json', ['uses' => ClientController::class.'@updateOsx']);
         $router->get('download', ['as' => 'client.downloadwin', 'uses' => ClientController::class.'@downloadWin']);
         $router->get('download-osx', ['as' => 'client.downloadosx', 'uses' => ClientController::class.'@downloadOsx']);
+        $router->get('download-linux-tar', ['as' => 'client.downloadlinuxtar', 'uses' => ClientController::class.'@downloadLinuxTar']);
+        
         $router->get('redirect/{username}/{repo}', ['uses' => ClientController::class.'@redirect']);
 //            $router->post('report/crash', ['uses' => 'Client\ReportController@crash']);
     }

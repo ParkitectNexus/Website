@@ -51,6 +51,24 @@ class ClientController extends Controller
                 'parkitectnexus-client.rar');
         }
     }
+
+
+    public function downloadLinuxTar()
+    {
+                // check if the request is coming from the client with this header
+        if (\Request::header('X-ParkitectNexusInstaller-Version', false) != false || !isset($_SERVER['HTTP_USER_AGENT'])) {
+            $this->dispatch(new RegisterLog(\Request::getClientIp(), 'update', \Request::header('X-ParkitectNexusInstaller-Version', '1.0.0.0')));
+
+            // client wants an uncompressed installer
+            return \Response::download(storage_path('client/parkitectnexus-client-' . getenv('LINUX_CLIENT_VERSION') . '.tar.gz'));
+        } else {
+            $this->dispatch(new RegisterLog(\Request::getClientIp(), 'download', ''));
+
+            return \Response::download(storage_path('client/zips/parkitectnexus-client-' . getenv('LINUX_CLIENT_VERSION') . '.tar.gz'),
+                'parkitectnexus-client.tar.gz');
+        }
+    }
+
     /**
      * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
      */
@@ -71,14 +89,10 @@ class ClientController extends Controller
     public function downloadPage()
     {
         $page = \PageRepo::find('client');
+        $change_log_repo = getenv('CHANGE_LOG_REPO');
+        $change_log_user = getenv('CHANGE_LOG_USER');
 
-        $view = 'client.clientwin';
-
-        if(\Agent::is('OS X')){
-            $view = 'client.clientosx';
-        }
-
-        return view($view, compact('page'));
+        return view('client.index', compact('page','change_log_user','change_log_repo'));
     }
     /**
      * @param $username
