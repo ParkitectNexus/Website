@@ -11,7 +11,7 @@ php:
   - 7.0
 
 install:
-  - 'if [ "${TEST_SUITE}" = "integration" ]; then
+  - 'if [ "${TEST_SUITE}" = "functional" ]; then
       . $HOME/.nvm/nvm.sh;
       nvm install stable;
       nvm use stable;
@@ -27,11 +27,12 @@ install:
   - mono --version
 
 before_script:
+  - cp .env.testing .env
   - mysql -e 'create database parkitect;'
   - composer self-update
   - composer install --no-interaction
   - php artisan migrate --force;
-  - 'if [ "${TEST_SUITE}" = "integration" ]; then
+  - 'if [ "${TEST_SUITE}" = "functional" ]; then
      bower install;
      gulp;
     fi'
