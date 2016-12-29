@@ -1,9 +1,5 @@
 <?php
 
-use Illuminate\Http\UploadedFile;
-use PN\Users\User;
-use Helper\StorageMockTrait;
-
 //class CreateScreenshotTest extends \Codeception\Test\Unit
 //{
 //    use StorageMockTrait;

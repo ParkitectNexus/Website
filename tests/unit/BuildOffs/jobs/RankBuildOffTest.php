@@ -36,7 +36,6 @@ class RankBuildOffTest extends \Codeception\Test\Unit
         $asset3->download_count = 100;
         $asset3->id = 153;
 
-
         $asset4 = \Mockery::mock(Asset::class)->makePartial();
         $asset4->like_count = 15;
         $asset4->download_count = 9000;

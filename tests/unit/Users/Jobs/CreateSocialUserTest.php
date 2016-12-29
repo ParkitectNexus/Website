@@ -12,6 +12,7 @@ class CreateSocialUserTest extends \Codeception\Test\Unit
      * @var \UnitTester
      */
     protected $tester;
+
     public function testCreateSocialUserGoogle()
     {
         //arrange

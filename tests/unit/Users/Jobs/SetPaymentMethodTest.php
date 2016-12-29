@@ -11,6 +11,7 @@ class SetPaymentMethodTest extends \Codeception\Test\Unit
      * @var \UnitTester
      */
     protected $tester;
+
     public function testSetPaymentMethod()
     {
         //arrange

@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Foundation\Bus\DispatchesJobs;
 use PN\Resources\Jobs\CreateResource;
 
 class ParkPrimaryTagCest

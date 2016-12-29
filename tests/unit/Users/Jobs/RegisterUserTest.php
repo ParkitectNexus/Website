@@ -23,7 +23,7 @@ class RegisterUserTest extends \Codeception\Test\Unit
             'email' => 'ihaveaweakpass@ema.il',
             'password' => '123456'
         ];
-        \UserRepo::shouldReceive("add")->once()->with(\Mockery::on(function (User $user){
+        \UserRepo::shouldReceive("add")->once()->with(\Mockery::on(function (User $user) {
             $this->assertTrue($user->username == 'Nice_username');
             $this->assertTrue($user->name == 'Even nicer name');
             $this->assertTrue($user->email == 'ihaveaweakpass@ema.il');

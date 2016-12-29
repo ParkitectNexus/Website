@@ -43,10 +43,10 @@ class AttachTagToAssetTest extends \Codeception\Test\Unit
 
         $asset = \Mockery::mock(Asset::class)->makePartial();
 
-        $excpetion = \Mockery::mock(QueryException::class);
+        $exception = \Mockery::mock(QueryException::class);
         $asset->shouldReceive("addTag")
             ->with(\Mockery::type(Tag::class))
-            ->andThrow($excpetion);
+            ->andThrow($exception);
 
         $tag = \Mockery::mock(Tag::class)->makePartial();
         $data = [

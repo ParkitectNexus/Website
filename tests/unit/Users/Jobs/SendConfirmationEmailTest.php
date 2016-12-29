@@ -80,20 +80,20 @@ class SendConfirmationEmailTest extends \Codeception\Test\Unit
                 return true;
 
             }), \Mockery::on(function (\Closure $closure) {
-            $mock = \Mockery::mock(Message::class);
-            $mock->shouldReceive('from')
-                ->once()
-                ->with('info@parkitectnexus.com', 'ParkitectNexus');
-            $mock->shouldReceive('to')
-                ->once()
-                ->with("fake@email.com", "test")->andReturn($mock);
-            $mock->shouldReceive('subject')
-                ->with(\Mockery::any());
+                $mock = \Mockery::mock(Message::class);
+                $mock->shouldReceive('from')
+                    ->once()
+                    ->with('info@parkitectnexus.com', 'ParkitectNexus');
+                $mock->shouldReceive('to')
+                    ->once()
+                    ->with("fake@email.com", "test")->andReturn($mock);
+                $mock->shouldReceive('subject')
+                    ->with(\Mockery::any());
 
-            $closure($mock);
+                $closure($mock);
 
-            return true;
-        }));
+                return true;
+            }));
 
         //act
         $this->dispatch(app(SendConfirmEmail::class, $userData));

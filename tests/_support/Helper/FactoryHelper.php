@@ -4,6 +4,8 @@ namespace Helper;
 // here you can define custom actions
 // all public methods declared in helper class will be available in $I
 
+use Codeception\Module;
+use Codeception\TestCase;
 use Illuminate\Support\Facades\Hash;
 use PN\Assets\Asset;
 use PN\Media\Image;
@@ -14,7 +16,7 @@ use League\FactoryMuffin\Faker\Facade as Faker;
 use League\FactoryMuffin\FactoryMuffin;
 use PN\Users\User;
 
-class FactoryHelper extends \Codeception\Module
+class FactoryHelper extends Module
 {
 
     /**
@@ -90,11 +92,14 @@ class FactoryHelper extends \Codeception\Module
 
     }
 
+    /**
+     * @return \League\FactoryMuffin\Factory
+     */
     public  function factory(){
         return $this->factory;
     }
 
-    public function _after(\Codeception\TestCase $test)
+    public function _after(TestCase $test)
     {
         // actually this is not needed
         // if you use cleanup: true option

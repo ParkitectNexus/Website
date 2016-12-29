@@ -1,10 +1,10 @@
 <?php
 
 
+use Helper\StorageMockTrait;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use PN\Users\Jobs\SetAvatar;
 use PN\Users\User;
-use Helper\StorageMockTrait;
 
 class SetAvatarTest extends \Codeception\Test\Unit
 {
@@ -14,6 +14,7 @@ class SetAvatarTest extends \Codeception\Test\Unit
      * @var \UnitTester
      */
     protected $tester;
+
     public function testSetAvatar()
     {
         //arrange

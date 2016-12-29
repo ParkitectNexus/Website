@@ -1,7 +1,6 @@
 <?php
 
 
-
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Support\Collection;
 use PN\Assets\Asset;

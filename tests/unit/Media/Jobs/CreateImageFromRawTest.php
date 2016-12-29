@@ -1,11 +1,9 @@
 <?php
 
-
-
+use Helper\StorageMockTrait;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use PN\Media\Image;
 use PN\Media\Jobs\CreateImageFromRaw;
-use Helper\StorageMockTrait;
 
 class CreateImageFromRawTest extends \Codeception\Test\Unit
 {

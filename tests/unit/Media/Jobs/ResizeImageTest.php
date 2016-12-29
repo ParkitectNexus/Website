@@ -1,9 +1,9 @@
 <?php
 
+use Helper\StorageMockTrait;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use PN\Media\Image;
 use PN\Media\Jobs\ResizeImage;
-use Helper\StorageMockTrait;
 
 class ResizeImageTest extends \Codeception\Test\Unit
 {
