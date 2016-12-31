@@ -180,7 +180,7 @@ class AuthController extends Controller
                 return \Redirect::intended();
             }
 
-            return \Redirect::home();
+            return \Redirect::route("home.index");
         } catch (UserNotFound $e) {
             \Notification::error('The entered credentials do not match our records');
 
