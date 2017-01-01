@@ -6,8 +6,9 @@ namespace Helper;
 
 use Codeception\Module;
 use Codeception\TestCase;
-use Illuminate\Support\Facades\Hash;
 use PN\Assets\Asset;
+use PN\Assets\Tag;
+use PN\Forum\Category;
 use PN\Media\Image;
 use PN\Resources\Facades\ResourceUtil;
 use PN\Resources\Resource;
@@ -88,8 +89,15 @@ class FactoryHelper extends Module
             }
         ]);
 
+        $this->factory->define(Category::class)->setDefinitions([
+            'title' => str_random(10),
+            'description' => Faker::text(),
+            'enable_threads' => 1,
+            'private' => 0,
+            'category_id' => 0
+        ]);
 
-
+        $this->factory()->define(Tag::class);
     }
 
     /**
@@ -101,9 +109,6 @@ class FactoryHelper extends Module
 
     public function _after(TestCase $test)
     {
-        // actually this is not needed
-        // if you use cleanup: true option
-        // in Laravel4 module
         $this->factory->deleteSaved();
     }
 }

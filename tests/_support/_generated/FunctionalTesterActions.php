@@ -3165,7 +3165,7 @@ trait FunctionalTesterActions
     /**
      * [!] Method is generated. Documentation taken from corresponding module.
      *
-     *
+     * @return \League\FactoryMuffin\Factory
      * @see \Helper\FactoryHelper::factory()
      */
     public function factory() {

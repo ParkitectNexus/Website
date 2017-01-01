@@ -80,7 +80,7 @@ class AuthControllerCest
 
     }
 
-    public function trySubmitForgotPassword(FunctionalTester $I)
+    public function _trySubmitForgotPassword(FunctionalTester $I)
     {
         //arrange
         $I->haveBinding('mailer', function () {
