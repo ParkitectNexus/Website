@@ -35,12 +35,25 @@ class AssetControllerCest
         $tag->generateTags();
         $I->amOnPage(route('assets.manage.selectmod'));
         $I->fillField("resource", 'https://github.com/ParkitectNexus/CoasterCam');
-        $I->checkOption("accept");
+        $I->checkOption("terms");
         $I->click("input[value='Go!']");
         $I->seeInSession('resource');
         $I->seeCurrentRouteIs('assets.manage.create');
         $this->_fillOutGeneral($I);
         
+        //assert
+    }
+
+    public function tryUploadModWithoutAcceptingTerms(FunctionalTester $I, \Step\Functional\Tag $tag)
+    {
+        //arrange
+        //act
+        $tag->generateTags();
+        $I->amOnPage(route('assets.manage.selectmod'));
+        $I->fillField("resource", 'https://github.com/ParkitectNexus/CoasterCam');
+        $I->click("input[value='Go!']");
+        $I->canSeeFormHasErrors();
+        $I->seeCurrentRouteIs('assets.manage.selectmod');
         //assert
     }
 

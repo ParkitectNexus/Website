@@ -13,11 +13,11 @@
                     {{ csrf_field() }}
                     <div class="form-group">
                         <label for="github">GitHub Repository, Full url</label>
-                        <input type="text" name="resource" class="form-control" id="github" placeholder="https://github.com/ParkitectNexus/CoasterCam">
+                        <input type="text" name="resource" class="form-control" id="github" value="{{ old('resource') }}" placeholder="https://github.com/ParkitectNexus/CoasterCam">
                     </div>
                     <div class="checkbox">
-                        <input id="accept" type="checkbox" name="accept">
                         <label for="accept">
+                            <input id="accept" type="checkbox" name="terms" >
                             I hereby declare that I am the owner or have permission to publish this repository/mod and
                             its contents. I grant permission to ParkitectNexus to distribute this mod to its users. I
                             added a license to my mod and I know that ParkitectNexus is not responsible for its users

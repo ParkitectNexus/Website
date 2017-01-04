@@ -7,8 +7,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use PN\Assets\AssetFilter;
 use PN\Assets\Events\UserDownloadedAsset;
-use PN\Assets\Exceptions\AssetCantBeDownloadedException;
 use PN\Assets\Events\UserViewingAsset;
+use PN\Assets\Exceptions\AssetCantBeDownloadedException;
 use PN\Assets\Repositories\AssetRepositoryInterface;
 use PN\Foundation\Http\Controllers\Controller;
 use PN\Foundation\StorageUtil;
@@ -36,7 +36,7 @@ class AssetController extends Controller
         abort_if($asset == null, 404);
 
         $comments = \CommentRepo::forAsset($asset);
-        
+
         event(new UserViewingAsset($asset, \Auth::user()));
 
         return view('assets.show', compact(
@@ -45,70 +45,18 @@ class AssetController extends Controller
         ));
     }
 
-    private function getStats() : Collection
-    {
-        $stats = new Collection();
-        
-        foreach (\Request::input('stats', []) as $slug => $value) {
-            $stat = \StatRepo::findBySlug($slug);
-
-            if($stat == null) dd($slug);
-            $stats->put($stat->id, $value);
-        }
-
-        return $stats;
-    }
-
-    private function getOnTags() : Collection
-    {
-        $onTags = Collection::make(\Request::input('tags'))->filter(function ($state) {
-            return $state == 'on';
-        });
-
-        if(!$onTags->count()) {
-            return new Collection();
-        }
-
-        return \TagRepo::findBySlugs(array_keys($onTags->toArray()));
-    }
-
-    private function getOffTags() : Collection
-    {
-        $offTags = Collection::make(\Request::input('tags'))->filter(function ($state) {
-            return $state == 'off';
-        });
-
-        if(!$offTags->count()) {
-            return new Collection();
-        }
-
-        return \TagRepo::findBySlugs(array_keys($offTags->toArray()));
-    }
-
-    private function getMaxAge() : Carbon
-    {
-        if(\Request::has('range')) {
-            if(\Request::input('range') == 'week') {
-                return Carbon::now()->subWeek();
-            }
-            if(\Request::input('range') == 'month') {
-                return Carbon::now()->subMonth();
-            }
-        }
-
-        return Carbon::now()->subYears(10);
-    }
-
     public function filterPage($type)
     {
         $morpedType = $type;
-        if($morpedType == 'scenario') $morpedType = 'park';
+        if ($morpedType == 'scenario') {
+            $morpedType = 'park';
+        }
 
         $filters = config('assetfilters.' . $morpedType, []);
 
         $tags = \TagRepo::findByCategory($type);
 
-        if($type == 'blueprint') {
+        if ($type == 'blueprint') {
             $contentTypeTags = \TagRepo::findByCategory('content-types');
             $coasterTypeTags = \TagRepo::findByCategory('coaster-types');
         } else {
@@ -131,18 +79,20 @@ class AssetController extends Controller
     public function filterAssets($type)
     {
         $morpedType = $type;
-        if($morpedType == 'scenario') $morpedType = 'park';
+        if ($morpedType == 'scenario') {
+            $morpedType = 'park';
+        }
 
         // todo hotfix
-        if(!\Request::has('sort')){
+        if (!\Request::has('sort')) {
             \Request::replace(array_merge(\Request::all(), ['sort' => 'hot_score']));
         }
 
         $onTags = $this->getOnTags();
         $offTags = $this->getOffTags();
 
-        if($type == 'park' || $type == 'scenario') {
-            if($type == 'park') {
+        if ($type == 'park' || $type == 'scenario') {
+            if ($type == 'park') {
                 $offTags = $offTags->merge([\TagRepo::findByTagName('Scenario')]);
             } else {
                 $onTags = $onTags->merge([\TagRepo::findByTagName('Scenario')]);
@@ -167,6 +117,62 @@ class AssetController extends Controller
             'assets',
             'type'
         ));
+    }
+
+    private function getOnTags(): Collection
+    {
+        $onTags = Collection::make(\Request::input('tags'))->filter(function ($state) {
+            return $state == 'on';
+        });
+
+        if (!$onTags->count()) {
+            return new Collection();
+        }
+
+        return \TagRepo::findBySlugs(array_keys($onTags->toArray()));
+    }
+
+    private function getOffTags(): Collection
+    {
+        $offTags = Collection::make(\Request::input('tags'))->filter(function ($state) {
+            return $state == 'off';
+        });
+
+        if (!$offTags->count()) {
+            return new Collection();
+        }
+
+        return \TagRepo::findBySlugs(array_keys($offTags->toArray()));
+    }
+
+    private function getStats(): Collection
+    {
+        $stats = new Collection();
+
+        foreach (\Request::input('stats', []) as $slug => $value) {
+            $stat = \StatRepo::findBySlug($slug);
+
+            if ($stat == null) {
+                dd($slug);
+            }
+            $stats->put($stat->id, $value);
+        }
+
+        return $stats;
+    }
+
+    private function getMaxAge(): Carbon
+    {
+        if (\Request::has('range')) {
+            if (\Request::input('range') == 'week') {
+                return Carbon::now()->subWeek();
+            }
+            if (\Request::input('range') == 'month') {
+                return Carbon::now()->subMonth();
+            }
+        }
+
+        return Carbon::now()->subYears(10);
     }
 
     public function download($identifier)
@@ -195,12 +201,14 @@ class AssetController extends Controller
             return response(base64_decode($result))
                 ->header('Content-Type', 'image/png')
                 ->header('Content-Disposition', "attachment; filename=\"{$asset->slug}.$extension\"");
-        } else if ($asset->type == 'park') {
-            $tempPath = StorageUtil::copyToTmp('parks', $asset->getResource()->source);
-
-            return \Response::download($tempPath, $asset->slug . '.' . $extension);
         } else {
-            throw new AssetCantBeDownloadedException(sprintf("Asset identifier: %s", $identifier));
+            if ($asset->type == 'park') {
+                $tempPath = StorageUtil::copyToTmp('parks', $asset->getResource()->source);
+
+                return \Response::download($tempPath, $asset->slug . '.' . $extension);
+            } else {
+                throw new AssetCantBeDownloadedException(sprintf("Asset identifier: %s", $identifier));
+            }
         }
     }
 }
