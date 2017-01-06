@@ -51,8 +51,9 @@ class AssetControllerCest
 
         $I->fillField('input[name=name]',$temp_asset->name);
         $I->fillField('textarea[name=description]',$temp_asset->description);
-        $I->click('input[type=submit]');
-
+        $I->click('Create');
+        $I->seeCurrentRouteIs('assets.show');
+        
         $category = $I->grabRecord(Asset::class,['name' => $temp_asset->name]);
         $I->assertTrue($category->description == $temp_asset->description);
 

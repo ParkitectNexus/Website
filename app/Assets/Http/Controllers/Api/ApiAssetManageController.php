@@ -7,7 +7,7 @@ use PN\Foundation\Http\Controllers\Controller;
 
 class ApiAssetManageController extends Controller
 {
-    public function postUploadAsset()
+    public function uploadAsset()
     {
         $resource = \ResourceUtil::make('resource');
 

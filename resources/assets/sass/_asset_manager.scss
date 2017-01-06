@@ -1,0 +1,11 @@
+.dependency-list>div{
+  &:last-child{
+    border-bottom-style: none;
+
+  }
+  overflow: hidden;
+  padding: 4px 3px;
+  border-bottom: #c9c9c9;
+  border-bottom-style: solid;
+  border-width: 1px;
+}

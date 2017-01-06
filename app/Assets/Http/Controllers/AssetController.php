@@ -13,7 +13,7 @@ use PN\Assets\Repositories\AssetRepositoryInterface;
 use PN\Foundation\Http\Controllers\Controller;
 use PN\Foundation\StorageUtil;
 
-class AssetController extends Controller
+class AssetController extends BaseAssetController
 {
     /**
      * @var AssetRepositoryInterface
@@ -36,67 +36,13 @@ class AssetController extends Controller
         abort_if($asset == null, 404);
 
         $comments = \CommentRepo::forAsset($asset);
-        
+
         event(new UserViewingAsset($asset, \Auth::user()));
 
         return view('assets.show', compact(
             'asset',
             'comments'
         ));
-    }
-
-    private function getStats() : Collection
-    {
-        $stats = new Collection();
-        
-        foreach (\Request::input('stats', []) as $slug => $value) {
-            $stat = \StatRepo::findBySlug($slug);
-
-            if($stat == null) dd($slug);
-            $stats->put($stat->id, $value);
-        }
-
-        return $stats;
-    }
-
-    private function getOnTags() : Collection
-    {
-        $onTags = Collection::make(\Request::input('tags'))->filter(function ($state) {
-            return $state == 'on';
-        });
-
-        if(!$onTags->count()) {
-            return new Collection();
-        }
-
-        return \TagRepo::findBySlugs(array_keys($onTags->toArray()));
-    }
-
-    private function getOffTags() : Collection
-    {
-        $offTags = Collection::make(\Request::input('tags'))->filter(function ($state) {
-            return $state == 'off';
-        });
-
-        if(!$offTags->count()) {
-            return new Collection();
-        }
-
-        return \TagRepo::findBySlugs(array_keys($offTags->toArray()));
-    }
-
-    private function getMaxAge() : Carbon
-    {
-        if(\Request::has('range')) {
-            if(\Request::input('range') == 'week') {
-                return Carbon::now()->subWeek();
-            }
-            if(\Request::input('range') == 'month') {
-                return Carbon::now()->subMonth();
-            }
-        }
-
-        return Carbon::now()->subYears(10);
     }
 
     public function filterPage($type)
@@ -138,8 +84,8 @@ class AssetController extends Controller
             \Request::replace(array_merge(\Request::all(), ['sort' => 'hot_score']));
         }
 
-        $onTags = $this->getOnTags();
-        $offTags = $this->getOffTags();
+        $onTags = $this->getOnTags(\Request::input('tags'));
+        $offTags = $this->getOffTags(\Request::input('tags'));
 
         if($type == 'park' || $type == 'scenario') {
             if($type == 'park') {
@@ -154,8 +100,8 @@ class AssetController extends Controller
             ->withNameLike(\Request::input('name', ''))
             ->withTags($onTags)
             ->withoutTags($offTags)
-            ->withStats($this->getStats())
-            ->withMaxAge($this->getMaxAge())
+            ->withStats($this->getStats(\Request::input('stats', [])))
+            ->withMaxAge($this->getMaxAge(\Request::has('range')))
             ->sortBy(request('sort', 'hot_score'));
 
         $assets = $assetFilter->filterPaginated();

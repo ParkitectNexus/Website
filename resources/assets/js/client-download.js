@@ -21,11 +21,9 @@ Vue.component('client-history',{
           res[i].body = writer.render( reader.parse(res[i].body));
         }
        
-        Vue.set(self, 'results', res)
-        
+        Vue.set(self, 'results', res);
 
-        console.log(self.results);
-      }
+      };
       xhr.send()
     }
   }

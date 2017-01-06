@@ -13,13 +13,7 @@
 			</p>
 
 			@if($asset->type == 'mod')
-				<div id="dependencies-box">
-					<select id="dependencies" multiple="multiple" name="dependencies[]">
-						@foreach($mods as $mod)
-							<option value="{{ $mod->identifier }}") @if($asset->isDependency($mod)) selected @endif>{{ $mod->name }}</option>
-						@endforeach
-					</select>
-				</div>
+				<dependency-list identifier="{{$asset->identifier}}" type="mod"></dependency-list>
 			@else
 				<p>
 					Not available for {{ $asset->type }}
@@ -28,3 +22,34 @@
 		</div>
 	</div>
 </div>
+
+@section('head')
+<script type="text/x-template" id="dependency-list-template">
+	<div>
+
+	<h3>Active Dependencies</h3>
+	<div class="dependency-list">
+		<div v-if="dependencies.length === 0">
+			None
+		</div>
+		<div v-for="(index,dependency) in dependencies" >
+			@{{ dependency.name }}
+			<input type="hidden" name="dependencies[]" value="@{{ dependency.identifier}}">
+			<div class="pull-right">
+				<button v-on:click="remove(dependency)" type="button" class="btn btn-default btn-sm btn-danger">Remove</button>
+			</div>
+		</div>
+	</div>
+	<h3>Inactive Dependencies</h3>
+	<input type="text" class="form-control" placeholder="Search" v-model="assetSearch" debounce="500"  @keyup.enter="updateEntries()" >
+	<div class="dependency-list pre-scrollable">
+		<div v-for="(index,asset) in assets" >
+			@{{ asset.name }}
+			<div class="pull-right">
+				<button v-on:click="add(asset)"  type="button" class="btn btn-default btn-sm">Add</button>
+			</div>
+		</div>
+	</div>
+	</div>
+</script>
+@append
