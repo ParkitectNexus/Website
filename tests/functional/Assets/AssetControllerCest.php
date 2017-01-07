@@ -9,7 +9,7 @@ class AssetControllerCest
     public function _before(FunctionalTester $I)
     {
         $I->factory()->seed(5, \PN\Media\Image::class);
-        $I->factory()->seed(5,User::class);
+        $I->factory()->seed(5, User::class);
 
         $this->user = $I->factory()->create(User::class);
         \Auth::login($this->user, false);
@@ -28,6 +28,20 @@ class AssetControllerCest
         $this->_fillOutGeneral($I);
     }
 
+    public function _fillOutGeneral(FunctionalTester $I)
+    {
+        $temp_asset = $I->factory()->instance(Asset::class);
+
+        $I->fillField('input[name=name]', $temp_asset->name);
+        $I->fillField('textarea[name=description]', $temp_asset->description);
+        $I->click('Create');
+        $I->seeCurrentRouteIs('assets.show');
+
+        $category = $I->grabRecord(Asset::class, ['name' => $temp_asset->name]);
+        $I->assertTrue($category->description == $temp_asset->description);
+
+    }
+
     public function tryUploadMod(FunctionalTester $I, \Step\Functional\Tag $tag)
     {
         //arrange
@@ -40,25 +54,9 @@ class AssetControllerCest
         $I->seeInSession('resource');
         $I->seeCurrentRouteIs('assets.manage.create');
         $this->_fillOutGeneral($I);
-        
+
         //assert
     }
-
-
-    public function _fillOutGeneral(FunctionalTester $I)
-    {
-        $temp_asset = $I->factory()->instance(Asset::class);
-
-        $I->fillField('input[name=name]',$temp_asset->name);
-        $I->fillField('textarea[name=description]',$temp_asset->description);
-        $I->click('Create');
-        $I->seeCurrentRouteIs('assets.show');
-        
-        $category = $I->grabRecord(Asset::class,['name' => $temp_asset->name]);
-        $I->assertTrue($category->description == $temp_asset->description);
-
-    }
-
 
 
 }

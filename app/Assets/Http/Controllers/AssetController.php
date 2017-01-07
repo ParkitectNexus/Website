@@ -3,14 +3,11 @@
 namespace PN\Assets\Http\Controllers;
 
 
-use Carbon\Carbon;
-use Illuminate\Support\Collection;
 use PN\Assets\AssetFilter;
 use PN\Assets\Events\UserDownloadedAsset;
-use PN\Assets\Exceptions\AssetCantBeDownloadedException;
 use PN\Assets\Events\UserViewingAsset;
+use PN\Assets\Exceptions\AssetCantBeDownloadedException;
 use PN\Assets\Repositories\AssetRepositoryInterface;
-use PN\Foundation\Http\Controllers\Controller;
 use PN\Foundation\StorageUtil;
 
 class AssetController extends BaseAssetController
@@ -48,13 +45,15 @@ class AssetController extends BaseAssetController
     public function filterPage($type)
     {
         $morpedType = $type;
-        if($morpedType == 'scenario') $morpedType = 'park';
+        if ($morpedType == 'scenario') {
+            $morpedType = 'park';
+        }
 
         $filters = config('assetfilters.' . $morpedType, []);
 
         $tags = \TagRepo::findByCategory($type);
 
-        if($type == 'blueprint') {
+        if ($type == 'blueprint') {
             $contentTypeTags = \TagRepo::findByCategory('content-types');
             $coasterTypeTags = \TagRepo::findByCategory('coaster-types');
         } else {
@@ -77,18 +76,20 @@ class AssetController extends BaseAssetController
     public function filterAssets($type)
     {
         $morpedType = $type;
-        if($morpedType == 'scenario') $morpedType = 'park';
+        if ($morpedType == 'scenario') {
+            $morpedType = 'park';
+        }
 
         // todo hotfix
-        if(!\Request::has('sort')){
+        if (!\Request::has('sort')) {
             \Request::replace(array_merge(\Request::all(), ['sort' => 'hot_score']));
         }
 
         $onTags = $this->getOnTags(\Request::input('tags'));
         $offTags = $this->getOffTags(\Request::input('tags'));
 
-        if($type == 'park' || $type == 'scenario') {
-            if($type == 'park') {
+        if ($type == 'park' || $type == 'scenario') {
+            if ($type == 'park') {
                 $offTags = $offTags->merge([\TagRepo::findByTagName('Scenario')]);
             } else {
                 $onTags = $onTags->merge([\TagRepo::findByTagName('Scenario')]);
@@ -141,12 +142,14 @@ class AssetController extends BaseAssetController
             return response(base64_decode($result))
                 ->header('Content-Type', 'image/png')
                 ->header('Content-Disposition', "attachment; filename=\"{$asset->slug}.$extension\"");
-        } else if ($asset->type == 'park') {
-            $tempPath = StorageUtil::copyToTmp('parks', $asset->getResource()->source);
-
-            return \Response::download($tempPath, $asset->slug . '.' . $extension);
         } else {
-            throw new AssetCantBeDownloadedException(sprintf("Asset identifier: %s", $identifier));
+            if ($asset->type == 'park') {
+                $tempPath = StorageUtil::copyToTmp('parks', $asset->getResource()->source);
+
+                return \Response::download($tempPath, $asset->slug . '.' . $extension);
+            } else {
+                throw new AssetCantBeDownloadedException(sprintf("Asset identifier: %s", $identifier));
+            }
         }
     }
 }

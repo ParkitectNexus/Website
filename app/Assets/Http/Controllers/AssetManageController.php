@@ -3,7 +3,6 @@
 namespace PN\Assets\Http\Controllers;
 
 
-use Illuminate\Support\Collection;
 use PN\Assets\Exceptions\SessionExpired;
 use PN\Assets\Http\Requests\CreateRequest;
 use PN\Assets\Http\Requests\SelectFileRequest;
@@ -11,18 +10,15 @@ use PN\Assets\Jobs\CreateAsset;
 use PN\Assets\Jobs\ParticipateInBuildOff;
 use PN\Assets\Jobs\ResetDependencies;
 use PN\Assets\Jobs\ResetThumbnail;
-use PN\Assets\Jobs\Tags\ResetSecondaryTags;
-use PN\Assets\Jobs\UpdateAsset;
-use PN\Media\Jobs\AddImageToAsset;
-use PN\Resources\Jobs\StoreResource;
-use PN\Resources\Stats\Jobs\CreateStats;
 use PN\Assets\Jobs\SetAssetImage;
-use PN\Assets\Jobs\SetPrimaryTags;
 use PN\Assets\Jobs\SetYoutubeOnAsset;
 use PN\Assets\Jobs\Tags\AttachTagToAsset;
+use PN\Assets\Jobs\Tags\ResetSecondaryTags;
+use PN\Assets\Jobs\UpdateAsset;
 use PN\Foundation\Http\Controllers\Controller;
+use PN\Media\Jobs\AddImageToAsset;
 use PN\Media\Jobs\CreateImageFromRaw;
-use Symfony\Component\HttpKernel\HttpCache\Store;
+use PN\Resources\Jobs\StoreResource;
 
 class AssetManageController extends Controller
 {

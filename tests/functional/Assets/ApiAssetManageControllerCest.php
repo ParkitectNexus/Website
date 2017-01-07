@@ -23,7 +23,7 @@ class ApiAssetManageControllerCest
 
     public function tryApiUpload(FunctionalTester $I)
     {
-        $I->sendPOST("api/assets/manage/upload-asset",[],['resource' => codecept_data_dir('files/park.txt')]);
+        $I->sendPOST("api/assets/manage/upload-asset", [], ['resource' => codecept_data_dir('files/park.txt')]);
         $I->seeResponseCodeIs(200);
         $I->see("assets/manage/create");
     }

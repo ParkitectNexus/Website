@@ -7,11 +7,9 @@ namespace PN\Assets\Http\Controllers\Api;
 use League\Fractal\Manager;
 use League\Fractal\Resource\Collection;
 use League\Fractal\Resource\Item;
-use League\Fractal\Serializer\ArraySerializer;
 use PN\Assets\AssetFilter;
 use PN\Assets\Http\Controllers\BaseAssetController;
 use PN\Assets\Transformers\AssetTransformer;
-use PN\Foundation\Http\Controllers\Controller;
 
 class ApiAssetController extends BaseAssetController
 {
@@ -33,7 +31,9 @@ class ApiAssetController extends BaseAssetController
 
         if (\Request::has('type')) {
             $type = \Request::input("type");
-            if ($type == 'scenario') $type = 'park';
+            if ($type == 'scenario') {
+                $type = 'park';
+            }
             $assetFilter->withType($type);
 
             if ($type == 'park' || $type == 'scenario') {
