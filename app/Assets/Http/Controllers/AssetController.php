@@ -116,6 +116,62 @@ class AssetController extends BaseAssetController
         ));
     }
 
+    private function getOnTags(): Collection
+    {
+        $onTags = Collection::make(\Request::input('tags'))->filter(function ($state) {
+            return $state == 'on';
+        });
+
+        if (!$onTags->count()) {
+            return new Collection();
+        }
+
+        return \TagRepo::findBySlugs(array_keys($onTags->toArray()));
+    }
+
+    private function getOffTags(): Collection
+    {
+        $offTags = Collection::make(\Request::input('tags'))->filter(function ($state) {
+            return $state == 'off';
+        });
+
+        if (!$offTags->count()) {
+            return new Collection();
+        }
+
+        return \TagRepo::findBySlugs(array_keys($offTags->toArray()));
+    }
+
+    private function getStats(): Collection
+    {
+        $stats = new Collection();
+
+        foreach (\Request::input('stats', []) as $slug => $value) {
+            $stat = \StatRepo::findBySlug($slug);
+
+            if ($stat == null) {
+                dd($slug);
+            }
+            $stats->put($stat->id, $value);
+        }
+
+        return $stats;
+    }
+
+    private function getMaxAge(): Carbon
+    {
+        if (\Request::has('range')) {
+            if (\Request::input('range') == 'week') {
+                return Carbon::now()->subWeek();
+            }
+            if (\Request::input('range') == 'month') {
+                return Carbon::now()->subMonth();
+            }
+        }
+
+        return Carbon::now()->subYears(10);
+    }
+
     public function download($identifier)
     {
         $asset = \AssetRepo::findByIdentifier($identifier);

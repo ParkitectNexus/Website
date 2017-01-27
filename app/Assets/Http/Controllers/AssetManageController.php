@@ -6,6 +6,7 @@ namespace PN\Assets\Http\Controllers;
 use PN\Assets\Exceptions\SessionExpired;
 use PN\Assets\Http\Requests\CreateRequest;
 use PN\Assets\Http\Requests\SelectFileRequest;
+use PN\Assets\Http\Requests\SelectModRequest;
 use PN\Assets\Jobs\CreateAsset;
 use PN\Assets\Jobs\ParticipateInBuildOff;
 use PN\Assets\Jobs\ResetDependencies;
@@ -46,9 +47,13 @@ class AssetManageController extends Controller
         return view('assets/manage/select-mod');
     }
 
-    public function postSelectMod(SelectFileRequest $request)
+    public function postSelectMod(SelectModRequest $request)
     {
-        $resource = \ResourceUtil::make(request('resource'));
+        try {
+            $resource = \ResourceUtil::make(request('resource'));
+        } catch (InvalidResource $e) {
+            return back()->withErrors("Please provided a valid Github repository.");
+        }
 
         \Session::set('resource', $resource);
 
@@ -57,8 +62,8 @@ class AssetManageController extends Controller
 
     public function getCreate($id = null)
     {
-        if($id != null){
-            $resource = \Cache::get('resources.'.$id);
+        if ($id != null) {
+            $resource = \Cache::get('resources.' . $id);
 
             \Session::set('resource', $resource);
         }
@@ -127,7 +132,7 @@ class AssetManageController extends Controller
             $this->dispatch(app(AttachTagToAsset::class, [$asset, $tag]));
         }
 
-        if(request('buildoff', 0) != 0) {
+        if (request('buildoff', 0) != 0) {
             $buildOff = \BuildOffRepo::find(request('buildoff'));
 
             $this->dispatch(new ParticipateInBuildOff($asset, $buildOff));
@@ -191,12 +196,14 @@ class AssetManageController extends Controller
             $this->dispatch(new SetYoutubeOnAsset($asset, request('youtube')));
         }
 
-        if(request('reset-image', false) != false) {
+        if (request('reset-image', false) != false) {
             $this->dispatch(new ResetThumbnail($asset));
-        } else if (\Request::hasFile('image')) {
-            $image = $this->dispatch(new CreateImageFromRaw(file_get_contents(\Request::file('image')->getRealPath())));
+        } else {
+            if (\Request::hasFile('image')) {
+                $image = $this->dispatch(new CreateImageFromRaw(file_get_contents(\Request::file('image')->getRealPath())));
 
-            $this->dispatch(new SetAssetImage($asset, $image));
+                $this->dispatch(new SetAssetImage($asset, $image));
+            }
         }
 
         foreach (\Request::file('album', []) as $image) {
