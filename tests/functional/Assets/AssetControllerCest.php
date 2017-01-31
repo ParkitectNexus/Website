@@ -42,6 +42,7 @@ class AssetControllerCest
 
     }
 
+
     public function tryUploadMod(FunctionalTester $I, \Step\Functional\Tag $tag)
     {
         //arrange
@@ -71,18 +72,7 @@ class AssetControllerCest
     }
 
 
-    public function _fillOutGeneral(FunctionalTester $I)
-    {
-        $temp_asset = $I->factory()->instance(Asset::class);
 
-        $I->fillField('input[name=name]',$temp_asset->name);
-        $I->fillField('textarea[name=description]',$temp_asset->description);
-        $I->click('input[type=submit]');
-
-        $category = $I->grabRecord(Asset::class,['name' => $temp_asset->name]);
-        $I->assertTrue($category->description == $temp_asset->description);
-        //assert
-    }
 
 
 }
