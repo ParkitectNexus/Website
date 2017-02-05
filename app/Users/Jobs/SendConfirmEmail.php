@@ -4,7 +4,7 @@ namespace PN\Users\Jobs;
 
 
 use PN\Jobs\Job;
-use PN\Users\Mail\ConfirmUser;
+use PN\Users\Mail\ConfirmUserMail;
 use PN\Users\User;
 
 class SendConfirmEmail extends Job
@@ -22,7 +22,7 @@ class SendConfirmEmail extends Job
         
         // only send confirmation mails to non social unconfirmed accounts
         if($user->confirmed == 0) {
-            \Mail::to($user->email)->send(new ConfirmUser($user));
+            \Mail::to($user->email)->send(new ConfirmUserMail($user));
         }
     }
 }

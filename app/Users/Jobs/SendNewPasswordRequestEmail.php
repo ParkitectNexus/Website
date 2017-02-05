@@ -5,7 +5,7 @@ namespace PN\Users\Jobs;
 
 
 use PN\Jobs\Job;
-use PN\Users\Mail\NewPassword;
+use PN\Users\Mail\NewPasswordMail;
 use PN\Users\User;
 
 /**
@@ -32,6 +32,6 @@ class SendNewPasswordRequestEmail extends Job
     {
         $user = $this->user;
 
-        \Mail::to($user->email)->send(new NewPassword($user));
+        \Mail::to($user->email)->send(new NewPasswordMail($user));
     }
 }

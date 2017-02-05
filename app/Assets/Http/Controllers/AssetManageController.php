@@ -104,7 +104,7 @@ class AssetManageController extends Controller
             $resource,
             \Auth::user(),
             \Request::get('name'),
-            \Request::get('description')
+            \Request::get('description') == null ? "" : \Request::get('description')
         ));
 
         if (\Request::get('youtube', '') != '') {

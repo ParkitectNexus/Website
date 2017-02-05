@@ -11,7 +11,7 @@
         "intervention/image": "^2.3",
         "prettus/l5-repository": "^2.1",
         "laravel/socialite": "^3.0",
-        "barryvdh/laravel-debugbar": "^2.2",
+        "barryvdh/laravel-debugbar": "^2.3",
         "predis/predis": "^1.0",
         "league/commonmark": "0.13",
         "edvinaskrucas/notification": "^5.1",

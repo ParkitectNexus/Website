@@ -11,19 +11,27 @@
 @endsection
 
 @section('sidebar')
-    @can('update', $asset)
-        <a href="{{ route('assets.manage.update', [$asset->identifier]) }}" class="btn btn-primary btn-block">
-            Update
-        </a>
-    @endcan
-    @can('delete', $asset)
-        <form method="post" action="{{ route('assets.manage.delete', [$asset->identifier]) }}">
-            {{ csrf_field() }}
-            {{ method_field('delete') }}
+    @if(\Gate::allows("update",$asset) || \Gate::allows("delete",$asset))
+        <div id="update-section">
+            @can('update', $asset)
 
-            <input type="submit" onclick="return confirm('Are you sure?')" class="btn btn-primary btn-block" value="Delete" />
-        </form>
-    @endcan
+                <a href="{{ route('assets.manage.update', [$asset->identifier]) }}" class="btn btn-primary btn-block">
+                    Update
+                </a>
+            @endcan
+            @can('delete', $asset)
+                <form method="post" action="{{ route('assets.manage.delete', [$asset->identifier]) }}">
+                    {{ csrf_field() }}
+                    {{ method_field('delete') }}
+
+                    <input type="submit" onclick="return confirm('Are you sure?')" class="btn btn-primary btn-block" value="Delete" />
+                </form>
+            @endcan
+
+            <hr>
+        </div>
+    @endif
+
     @include('users.partials.profile', ['user' => $asset->getUser()])
     <hr>
 

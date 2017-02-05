@@ -8,7 +8,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use PN\Users\User;
 
-class NewPassword extends Mailable
+class ConfirmUserMail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -35,8 +35,8 @@ class NewPassword extends Mailable
     public function build()
     {
         return $this->from("info@parkitectnexus.com", "ParkitectNexus")
-            ->subject("New password request")
-            ->view("auth.emails.new-password")
+            ->subject('Confirm your account on ParkitectNexus')
+            ->view("auth.emails.confirm")
             ->with([
                 "user" => $this->user
             ]);

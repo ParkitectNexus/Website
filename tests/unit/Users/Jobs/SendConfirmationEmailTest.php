@@ -35,7 +35,7 @@ class SendConfirmationEmailTest extends \Codeception\Test\Unit
         $this->dispatch(new SendConfirmEmail($user));
 
         //assert
-        \Mail::assertSent(\PN\Users\Mail\ConfirmUser::class);
+        \Mail::assertSent(\PN\Users\Mail\ConfirmUserMail::class);
     }
 
     public function testSendConfirmationEmailUnConfirmed()
@@ -59,6 +59,6 @@ class SendConfirmationEmailTest extends \Codeception\Test\Unit
         $this->dispatch(new SendConfirmEmail($user));
 
         //assert
-        \Mail::assertNotSent(\PN\Users\Mail\ConfirmUser::class);
+        \Mail::assertNotSent(\PN\Users\Mail\ConfirmUserMail::class);
     }
 }

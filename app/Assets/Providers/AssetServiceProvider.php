@@ -54,11 +54,11 @@ class AssetServiceProvider extends ServiceProvider
                     'as' => 'manage.create',
                     'uses' => AssetManageController::class . '@postCreate'
                 ]);
-                $router->get('manage/update', [
+                $router->get('manage/update/{identifier}', [
                     'as' => 'manage.update',
                     'uses' => AssetManageController::class . '@getUpdate'
                 ]);
-                $router->post('manage/update', [
+                $router->post('manage/update/{identifier}', [
                     'as' => 'manage.update',
                     'uses' => AssetManageController::class . '@postUpdate'
                 ]);

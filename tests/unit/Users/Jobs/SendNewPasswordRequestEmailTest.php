@@ -30,7 +30,7 @@ class SendNewPasswordRequestEmailTest extends \Codeception\Test\Unit
         $this->dispatch(new SendNewPasswordRequestEmail($user));
 
         //assert
-        \Mail::assertSent(\PN\Users\Mail\NewPassword::class);
+        \Mail::assertSent(\PN\Users\Mail\NewPasswordMail::class);
     }
 
 
