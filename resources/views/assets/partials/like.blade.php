@@ -6,7 +6,7 @@
              liked="{{ var_export(\Auth::user()->liked($asset), true) }}"
           @endif
           can-like="{{ $asset->canBeLiked() }}"
-          is-buildoff="{{ $asset->inBuildOff() }}"
+          hide-count="{{ $asset->inBuildOff() }}"
           num-likes="{{ $asset->like_count }}"
 
     >

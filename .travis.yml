@@ -22,7 +22,6 @@ install:
       npm install -g yarn;
       npm -v;
       yarn --version;
-      yarn global add gulp;
     fi'
   - sudo apt-get install mono-complete
   - mono --version
@@ -35,7 +34,7 @@ before_script:
   - php artisan migrate --force;
   - 'if [ "${TEST_SUITE}" != "unit" ]; then
      yarn install;
-     gulp;
+     yarn run production;
     fi'
 
 script:

@@ -54,26 +54,14 @@
         @endif
 
         @if(Auth::user())
-            <like class="text-muted like"
-                  likes="{{ $post->like_count }}"
+            <like-forum-post class="text-muted like"
+                  num-likes="{{ $post->like_count }}"
                   type="post"
                   id="{{ $post->id }}"
+                  can-like="{{\Auth::check()}}"
                   @if(\Auth::check())liked="{{ var_export(\Auth::user()->liked($post), true) }}"@endif>
-            </like>
-            <script type="text/html" id="like-template">
-                <span>
-                    <i class="fa" v-bind:class="{ 'fa-heart': isLiked(), 'fa-heart-o': !isLiked() }"  @if(\Auth::check()) v-on:click="toggleLike" @endif></i>
-                </span>
-                @{{ likes }} <span v-if="likes > 0">
-                    <span v-if="likes == 1">
-                        Person like this
-                    </span>
-                    <span v-if="likes != 1">
-                        People like this
-                    </span>
-                </span>
-                |
-            </script>
+            </like-forum-post>
+
         @endif
         <span class="text-muted">
             {{ trans('forum/general.posted') }} {{ $post->posted }}

@@ -27,33 +27,19 @@
     @endcan
     @include('users.partials.profile', ['user' => $screenshot->getUser()])
     <hr>
-    <like likes="{{ $screenshot->like_count }}"
-         type="screenshot"
-         id="{{ $screenshot->id }}"
-         @if(\Auth::check())
-         liked="{{ var_export(\Auth::user()->liked($screenshot), true) }}"
-            @endif>
-    </like>
-    <script type="text/html" id="like-template">
-        <div class="row">
-            @{{ message }}
-            <div class="col-xs-6 text-center" title="Views">
-                <i class="fa icon-xl" v-bind:class="{ 'fa-heart': isLiked(), 'fa-heart-o': !isLiked() }" @if(\Auth::check()) v-on:click="toggleLike" @endif></i>
-            </div>
-            <div class="col-xs-6 text-center" title="Downloads">
-                <b>
-                    @{{ likes }}
-                </b>
-                <br>
-                <span v-if="likes == 1">
-                    Person like this
-                </span>
-                <span v-if="likes != 1">
-                    People like this
-                </span>
-            </div>
-        </div>
-    </script>
+
+    <like-button
+                 type="screenshot"
+                 id="{{ $screenshot->id }}"
+                 @if(\Auth::check())
+                 liked="{{ var_export(\Auth::user()->liked($screenshot), true) }}"
+                 @endif
+                 can-like="{{ \Auth::check() }}"
+                 hide-count="false"
+                 num-likes="{{ $screenshot->like_count }}"
+    >
+    </like-button>
+
     <br>
     <input type="text" class="form-control" value="{{ url($screenshot->getImage()->getPresenter()->source()) }}" readonly>
 

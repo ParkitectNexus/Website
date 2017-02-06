@@ -86,12 +86,4 @@
     <h1>Change Log</h1>
     <client-history repository="{{ $change_log_repo }}" user="{{ $change_log_user }}"></client-history>
 
-    <script type="text/html" id="client-history-template">
-        <div class="history-container">
-            <div v-for="result in results" class="history-entry">
-                <a href="@{{result.html_url}}"><h4>@{{result.tag_name}}</h4></a>
-                <div class="body" v-html="result.body"></div>
-            </div>
-        </div>
-    </script>
 @endsection

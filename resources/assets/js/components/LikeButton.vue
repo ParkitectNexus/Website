@@ -1,4 +1,5 @@
 <template>
+
     <div v-if="canLike" class="row like">
 
         <div class="col-xs-6 text-center" title="Views">
@@ -6,23 +7,19 @@
             <i v-else class="fa icon-xl fa fa-heart fa-heart-o"></i>
         </div>
         <div class="col-xs-6 text-center" title="Downloads">
-            <div v-if="isBuildoff">
+            <div v-if="hideCount">
                 <p>
                     <span v-if="liked"> You like this </span>
                     <span v-else> You didn't like this yet </span>
                 </p>
-
-                <b>
-                    {{ likeCount }}
-                </b>
             </div>
             <div v-else>
 
                 <p v-if="likeCount == 1">
-                    Person like this
+                    Person liked this
                 </p>
                 <p v-else>
-                    People like this
+                    People liked this
                 </p>
 
                 <b>
@@ -35,26 +32,31 @@
     <div  class="text-muted" v-else>
         This {{ type }} is participating in a build-off, voting starts
     </div>
+
 </template>
 
 <script>
     import axios from 'axios'
 
     export default{
-        props: ['type','id','liked','canLike','isBuildoff',"numLikes"],
+        props: ['type','id','liked','canLike','hideCount',"numLikes"],
         data: function() {
-          return {
-              likeCount: this.numLikes,
-              likeState: (this.liked == 'true' || this.liked=== true)
-          };
+
+            return {
+                likeState: (this.liked == 'true' || this.liked=== true),
+                likeCount: (Number(this.numLikes) + ((this.liked == 'true' || this.liked=== true) ? 1 : 0))
+
+            };
         },
         methods: {
             toggleLike: function()
             {
-                if(this.likeState) {
-                    this.unlike()
-                } else {
-                    this.like()
+                if(this.canLike) {
+                    if (this.likeState) {
+                        this.unlike()
+                    } else {
+                        this.like()
+                    }
                 }
             },
             like: function() {
