@@ -1,3 +1,17 @@
+import './bootstrap'
+
+
+import LikeButton from './components/LikeButton'
+
+
+new Vue({
+    el: '#app',
+
+    components: {
+        LikeButton
+    }
+})
+
 $('.dropdown-toggle').dropdown();
 
 function registerDownload(type, id) {
