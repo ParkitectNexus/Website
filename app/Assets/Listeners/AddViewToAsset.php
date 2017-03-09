@@ -21,6 +21,6 @@ class AddViewToAsset
      */
     public function handle(UserViewingAsset $event)
     {
-        $this->dispatch(new AddView($event->user, $event->asset));
+        $this->dispatch(new AddView($event->user, $event->asset, \Request::ip()));
     }
 }

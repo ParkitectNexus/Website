@@ -28,14 +28,21 @@ class AddDownload extends Job implements ShouldQueue
     private $downloadable;
 
     /**
+     * @var string
+     */
+    private $ip;
+
+    /**
      * AddDownload constructor.
      * @param $user
      * @param Model $downloadable
+     * @param $ip
      */
-    public function __construct($user, Model $downloadable)
+    public function __construct($user, Model $downloadable, $ip)
     {
         $this->user = $user;
         $this->downloadable = $downloadable;
+        $this->ip = $ip;
     }
 
     public function handle()
@@ -47,7 +54,7 @@ class AddDownload extends Job implements ShouldQueue
         }
 
         $download->setDownloadable($this->downloadable);
-        $download->ip = \Request::ip();
+        $download->ip = $this->ip;
 
         \DownloadRepo::add($download);
     }
