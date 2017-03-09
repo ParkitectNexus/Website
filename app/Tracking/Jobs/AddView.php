@@ -28,11 +28,17 @@ class AddView extends Job implements ShouldQueue
     private $viewable;
 
     /**
+     * @var string
+     */
+    private $ip;
+
+    /**
      * AddView constructor.
      * @param $user
      * @param Model $viewable
+     * @param $ip
      */
-    public function __construct($user, Model $viewable)
+    public function __construct($user, Model $viewable, $ip)
     {
         $this->user = $user;
         $this->viewable = $viewable;
@@ -47,7 +53,7 @@ class AddView extends Job implements ShouldQueue
         }
 
         $view->setViewable($this->viewable);
-        $view->ip = \Request::ip();
+        $view->ip = $this->ip;
 
         \ViewRepo::add($view);
     }
