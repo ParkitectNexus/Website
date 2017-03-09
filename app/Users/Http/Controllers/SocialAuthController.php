@@ -153,14 +153,14 @@ class SocialAuthController extends Controller
                     ));
 
                     $this->dispatch(new SetSteamIdOnUser($user, $info->steamID64));
-
-                    if ($user->username == '') {
-                        return redirect(route('socialauth.setusername', [\Crypt::encrypt($user->identifier)]));
-                    }
                 }
             } else {
                 // user was found, just log the user in
                 \Auth::login($user);
+            }
+
+            if ($user->username == '') {
+                return redirect(route('socialauth.setusername', [\Crypt::encrypt($user->identifier)]));
             }
 
             $user->avatar = $info->avatarfull;
