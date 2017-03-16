@@ -126,11 +126,11 @@ class AuthServiceProvider extends ServiceProvider
                     'as' => 'socialauth.steam.callback',
                     'uses' => SocialAuthController::class . '@getSteamCallback'
                 ]);
-                $router->get('set-username', [
+                $router->get('set-username/{identifier}', [
                     'as' => 'socialauth.setusername',
                     'uses' => SocialAuthController::class . '@getSetUsername'
                 ]);
-                $router->post('set-username', [
+                $router->post('set-username/{identifier}', [
                     'as' => 'socialauth.setusername',
                     'uses' => SocialAuthController::class . '@postSetUsername'
                 ]);

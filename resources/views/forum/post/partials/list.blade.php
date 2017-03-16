@@ -2,7 +2,7 @@
 <div class="row post {{ $post->trashed() ? 'deleted' : '' }}" id="post-{{ $post->id }}">
     <div class="col-xs-12 col-sm-2">
         <p class="avatar-info">
-            <a href="{{ $post->user->url }}">{!! $post->userName !!}</a>
+            <a href="{{ $post->user->getPresenter()->url() }}">{!! $post->userName !!}</a>
             <br>
             @if($post->user->flair != '')
                 <span class="label label-primary">

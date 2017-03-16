@@ -26,7 +26,6 @@ class Kernel extends ConsoleKernel
         RecalculateLikes::class,
         RecalculateHotScore::class,
         RankBuildOffs::class,
-        ScrapeWorkshop::class,
         ResetAllPrimaryTags::class
     ];
 
@@ -43,6 +42,5 @@ class Kernel extends ConsoleKernel
         $schedule->command('views:recalculate')->hourly();
         $schedule->command('likes:recalculate')->everyMinute();
         $schedule->command('score:recalculate')->everyMinute();
-        $schedule->command('backup:run')->twiceDaily(0, 12);
     }
 }

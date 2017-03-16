@@ -17,6 +17,6 @@ class RegisterView
 
     public function handle(UserViewingThread $event)
     {
-        $this->dispatch(new AddView(\Auth::user(), $event->thread));
+        $this->dispatch(new AddView(\Auth::user(), $event->thread, \Request::ip()));
     }
 }

@@ -21,6 +21,6 @@ class AddDownloadToAsset
      */
     public function handle(UserDownloadedAsset $event)
     {
-        $this->dispatch(new AddDownload($event->user, $event->asset));
+        $this->dispatch(new AddDownload($event->user, $event->asset, \Request::ip()));
     }
 }
