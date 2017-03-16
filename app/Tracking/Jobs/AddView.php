@@ -42,6 +42,7 @@ class AddView extends Job implements ShouldQueue
     {
         $this->user = $user;
         $this->viewable = $viewable;
+        $this->ip = $ip;
     }
 
     public function handle()
